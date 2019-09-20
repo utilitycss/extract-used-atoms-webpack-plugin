@@ -19,6 +19,7 @@ In your webpack config `plugins` section add:
 
 ```js
 new ExtractUsedAtoms({
+  filename: "used-atoms",
   scope: "@dx",
   cssBundle: "@dx/all",
   excluded: ["@dx/mocks"],
@@ -26,6 +27,7 @@ new ExtractUsedAtoms({
 ```
 
 where:
+- `filename` is the name for the generated CSS assets
 - `scope` is the scope of your atom packages.
 - `cssBundle` [required] is your "all" atom generated package
 - `excluded` is a list of strings or RegExp of packages to exclude

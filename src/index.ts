@@ -1,11 +1,9 @@
 import postcss from "postcss";
 import * as fs from "fs";
-import * as path from "path";
 import { promisify } from "util";
 
 const cssnano = require("cssnano");
 
-const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 
 const RemoveUnused = postcss.plugin(
@@ -32,7 +30,7 @@ interface ExtractUsedAtomsOptions {
   scope: string;
   excluded: (string | RegExp)[];
   cssBundle: string;
-  output: string;
+  filename: string;
   minify: boolean;
 }
 
@@ -41,22 +39,24 @@ class ExtractUsedAtoms {
   scopeRE: RegExp;
   excluded: RegExp[];
   cssBundle: string;
-  output: string;
+  filename: string;
   minify: boolean;
   usages: AtomUsage[];
   hashes: string[];
+
   constructor(options: ExtractUsedAtomsOptions) {
     const {
       scope = "",
       excluded = [],
       cssBundle = "",
-      output = "used-atoms.css",
+      filename = "used-atoms",
       minify = true
     } = options;
+
     this.scope = scope;
     this.scopeRE = new RegExp(`${scope}/`);
     this.excluded = excluded.concat(cssBundle).map(a => new RegExp(a));
-    (this.cssBundle = cssBundle), (this.output = output);
+    (this.cssBundle = cssBundle), (this.filename = filename);
     this.minify = minify;
     this.usages = [];
     this.hashes = [];
@@ -74,11 +74,12 @@ class ExtractUsedAtoms {
               this.excluded.every(a => !a.test(module.rawRequest))
             ) {
               const name: string = module.rawRequest;
-              const used: string[] = module.usedExports.includes("default")
-                ? module.usedExports
+              const usedExports = module.usedExports || [];
+              const used: string[] = usedExports.includes("default")
+                ? usedExports
                     .concat(module.buildMeta.providedExports)
                     .filter((el: string) => el !== "default")
-                : module.usedExports;
+                : usedExports;
               const hashes = used.map(n => require(name)[n]);
               const moduleUsage = {
                 name,
@@ -130,7 +131,11 @@ class ExtractUsedAtoms {
           const cssBundle = await postcss(plugins).process(css, {
             from: undefined
           });
-          await writeFile(path.join(process.cwd(), this.output), cssBundle.css);
+
+          compilation.assets[`${this.filename}.css`] = {
+            source: () => cssBundle.css,
+            size: () => cssBundle.css.length
+          };
         }
         cb();
       }
