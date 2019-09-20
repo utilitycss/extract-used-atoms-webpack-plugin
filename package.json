@@ -1,6 +1,6 @@
 {
   "name": "@utilitycss/extract-used-atoms-webpack-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Andrea Moretti (@axyz) <axyzxp@gmail.com>",
   "description": "Create a CSS file with only the used classes from an atomic bundle",
   "repository": "utilitycss/extract-used-atoms-webpack-plugin",
@@ -14,8 +14,9 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
-    "cssnano": "^4.1.10",
-    "cssnano-preset-advanced": "^4.0.7"
+    "cssnano": "4.1.10",
+    "cssnano-preset-advanced": "4.0.7",
+    "postcss": "7.0.18"
   },
   "devDependencies": {
     "@types/node": "^9.4.6",
