@@ -1,6 +1,6 @@
 {
   "name": "@utilitycss/extract-used-atoms-webpack-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Andrea Moretti (@axyz) <axyzxp@gmail.com>",
   "description": "Create a CSS file with only the used classes from an atomic bundle",
   "repository": "utilitycss/extract-used-atoms-webpack-plugin",
