@@ -1,0 +1,43 @@
+{
+  "name": "@utilitycss/extract-used-atoms-webpack-plugin",
+  "version": "0.0.1",
+  "author": "Andrea Moretti (@axyz) <axyzxp@gmail.com>",
+  "description": "Create a CSS file with only the used classes from an atomic bundle",
+  "repository": "utilitycss/extract-used-atoms-webpack-plugin",
+  "license": "MIT",
+  "main": "dist",
+  "scripts": {
+    "prepublish": "npm run build-ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "dependencies": {
+    "cssnano": "^4.1.10",
+    "cssnano-preset-advanced": "^4.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.6",
+    "husky": "^2.2.0",
+    "prettier": "^1.17.1",
+    "lint-staged": "^8.1.6",
+    "tslint": "^5.9.1",
+    "typescript": "^3.4.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": ["prettier --no-config --write", "git add"],
+      "*.ts": [
+        "prettier --no-config --write",
+        "tslint -c tslint.json -p tsconfig.json --fix",
+        "git add"
+      ]
+    }
+  }
+}
