@@ -55,12 +55,13 @@ class ExtractUsedAtoms {
     } = options;
     this.scope = scope;
     this.scopeRE = new RegExp(`${scope}/`);
-    this.excluded = excluded.map(a => new RegExp(a));
+    this.excluded = excluded.concat(cssBundle).map(a => new RegExp(a));
     (this.cssBundle = cssBundle), (this.output = output);
     this.minify = minify;
     this.usages = [];
     this.hashes = [];
   }
+
   apply(compiler: any) {
     compiler.hooks.emit.tapAsync(
       "ExtractUsedAtoms",
